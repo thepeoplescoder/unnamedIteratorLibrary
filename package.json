@@ -1,0 +1,23 @@
+{
+  "name": "@thepeoplescoder/collections",
+  "version": "1.0.0",
+  "description": "Provides map/filter/reduce/etc. to iterators.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup"
+  },
+  "author": "thepeoplescoder",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsup": "^8.2.3",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.4"
+  },
+  "dependencies": {
+    "@thepeoplescoder/throw_": "^1.0.0"
+  }
+}
