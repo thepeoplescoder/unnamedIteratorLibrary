@@ -27,18 +27,6 @@ export function isGenerator<T = unknown, TReturn = any, TNext = undefined>(x: an
   return checks.isGenerator(x);
 }
 
-export function isIteratorOrGenerator<T = unknown, TReturn = any, TNext = undefined>(x: any): x is Iterator<T, TReturn, TNext> {
-  return checks.isIteratorOrGenerator(x);
-}
-
-export function isAsyncIterator<T, TReturn = any, TNext = undefined>(x: any): x is AsyncIterator<T, TReturn, TNext> {
-  return checks.isAsyncIterator(x);
-}
-
 export function isAsyncGenerator<T = unknown, TReturn = any, TNext = undefined>(x: any): x is AsyncGenerator<T, TReturn, TNext> {
   return checks.isAsyncGenerator(x);
-}
-
-export function isAsyncGeneratorOrAsyncIterator<T = unknown, TReturn = any, TNext = undefined>(x: any): x is AsyncIterator<T, TReturn, TNext> {
-  return checks.isAsyncGeneratorOrAsyncIterator(x);
 }

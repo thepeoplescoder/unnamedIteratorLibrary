@@ -16,20 +16,8 @@ export function isGenerator(x: any) {
   return typeOf(x) === "Generator";
 }
 
-export function isIteratorOrGenerator(x: any) {
-  return isIterator(x) || isGenerator(x);
-}
-
-export function isAsyncIterator(x: any) {
-  return isActualObject(x) && typeof (x as any).next === "function";
-}
-
 export function isAsyncGenerator(x: any) {
   return typeOf(x) === "AsyncGenerator";
-}
-
-export function isAsyncGeneratorOrAsyncIterator(x: any) {
-  return isAsyncGenerator(x) || isAsyncIterator(x);
 }
 
 export function isPromise(x: any) {

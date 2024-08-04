@@ -1,7 +1,7 @@
-import { asAsyncIterator, toAsyncIterator } from "@~main/util/convert/toAsyncIterator";
+import { asAsyncIterator } from "@~main/util/convert/asAsyncIterator";
 
 import { describe, it, expect } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import { isIterator, isPromise } from "@~types/runtime/checks";
 
@@ -21,7 +21,4 @@ describe(asAsyncIterator.name, () => {
     const possibleAsyncIteratorResult = possibleAsyncIterator.next();
     expect(possibleAsyncIteratorResult).toSatisfy(isPromise);
   });
-});
-
-describe(toAsyncIterator.name, () => {
 });

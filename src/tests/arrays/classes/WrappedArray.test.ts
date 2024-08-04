@@ -1,7 +1,7 @@
 import WrappedArray from "@~main/arrays/classes/WrappedArray";
 
 import { describe, it, expect, beforeEach } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 describe(WrappedArray.name, () => {
   let array: ReturnType<typeof TestObjects.newArray>; 
@@ -39,9 +39,11 @@ describe(WrappedArray.name, () => {
       });
       it("should support Python-style negative indices", () => {
         const index = -1;
+        const trueIndex = wrappedArray.trueIndex(index);
+
         expect(index).toBeLessThan(0);
-        expect(index + wrappedArray.length).toBeGreaterThanOrEqual(0);
-        expect(wrappedArray.trueIndex(index)).toBe(wrappedArray.length + index);
+        expect(trueIndex).toBeGreaterThanOrEqual(0);
+        expect(trueIndex).toBe(wrappedArray.length + index);
       });
     });
 
@@ -58,9 +60,17 @@ describe(WrappedArray.name, () => {
       it("should support negative indices, starting from the last element", () => {
         const index = -4;
         expect(index).toBeLessThan(0);
-        expect(index + wrappedArray.length).toBeGreaterThanOrEqual(0);
-        expect(wrappedArray.at(index)).toEqual(wrappedArray._[wrappedArray.length + index]);
-      })
+        expect(wrappedArray.trueIndex(index)).toBeGreaterThanOrEqual(0);
+        expect(wrappedArray.at(index)).toEqual(wrappedArray._[wrappedArray.trueIndex(index)]);
+      });
+      it("should support a second parameter for modifying the value at the index", () => {
+        const index = -4;
+        expect(wrappedArray.trueIndex(index)).toBeGreaterThanOrEqual(0);
+        const value = wrappedArray.at(index);
+        const newValue = value + value;
+        wrappedArray.at(index, newValue);
+        expect(wrappedArray.at(index)).toEqual(newValue);
+      });
     });
 
     it("should have a method called unwrap", () => {

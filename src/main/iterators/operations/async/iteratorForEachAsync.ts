@@ -12,4 +12,4 @@ export default async function iteratorForEachAsync<T, TReturn = any, TNext = und
 }
 
 export type IteratorForEachAsyncCallback<T, TReturn, TNext> =
-  (value: T, index: number, originalIterator: AsyncIterator<T, TReturn, TNext>) => Promise<void>;
+  (value: T, index: number, originalIterator: AsyncIterator<T, TReturn, TNext>) => Promise<any>;

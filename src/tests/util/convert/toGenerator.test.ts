@@ -1,7 +1,7 @@
 import { toGenerator } from "@~main/util/convert/toGenerator";
 
 import { describe, it, expect } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import { isGenerator, isIterator } from "@~types/runtime/checks";
 

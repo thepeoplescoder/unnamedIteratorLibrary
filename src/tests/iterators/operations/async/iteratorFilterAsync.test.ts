@@ -1,10 +1,12 @@
 import iteratorFilterAsync from "@~main/iterators/operations/async/iteratorFilterAsync";
 
 import { describe, expect, it } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import typeOf from "@~types/runtime/typeOf";
-import { asAsyncIterator } from "@~util/convert/toAsyncIterator";
+import { asAsyncIterator } from "@~main/util/convert/asAsyncIterator";
+
+import arrayFromAsync from "@~lib/arrayFromAsync";
 
 describe(iteratorFilterAsync.name, async () => {
   it("should be an async generator function", () => {
@@ -23,11 +25,3 @@ describe(iteratorFilterAsync.name, async () => {
     expect(resultArray).toEqual(expected);
   });
 });
-
-async function arrayFromAsync<T, TReturn = void, TNext = unknown>(x: AsyncGenerator<T, TReturn, TNext>) {
-  const result: T[] = [];
-  for (let itResult = await x.next(); !itResult.done; itResult = await x.next()) {
-    result.push(itResult.value);
-  }
-  return result;
-}

@@ -1,7 +1,7 @@
 import { iwrap } from "@~main/iterators/iwrap";
 
 import { describe, it, expect, test } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import { isIterable, isIterator } from "@~types/runtime/checks";
 

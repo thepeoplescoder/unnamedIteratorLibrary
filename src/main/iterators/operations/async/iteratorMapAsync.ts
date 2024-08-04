@@ -1,4 +1,4 @@
-import { AsyncGenerators, AsyncIterators } from "@~util/convert/toAsyncIterator";
+import { AsyncGenerators, AsyncIterators } from "@~main/util/convert/asAsyncIterator";
 import { ThisArg, bindThisArg } from "@~types/static/ThisArg";
 
 export default async function* iteratorMapAsync<T, TReturn = any, TNext = undefined, U = any>(

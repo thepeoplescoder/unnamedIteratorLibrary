@@ -1,7 +1,7 @@
 import { callIteratorMethod, callAsyncIteratorMethod } from "@~main/util/callIteratorMethod";
 
 import { describe, expect, it } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import { isGenerator, isIterator } from "@~types/runtime/checks";
 

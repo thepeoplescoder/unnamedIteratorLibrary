@@ -1,5 +1,3 @@
-import WrappedAsyncIterator from "./WrappedAsyncIterator";
-
 export default abstract class WrappedIteratorBase<T, TReturn, TNext> {
   private _isAssumedToBeInfinite = false;
   private _iterator: Iterator<T, TReturn, TNext> | AsyncIterator<Awaited<T>, TReturn, TNext>;
@@ -13,11 +11,9 @@ export default abstract class WrappedIteratorBase<T, TReturn, TNext> {
     return this._iterator;
   }
 
-  isAsync() {
-    return this instanceof WrappedAsyncIterator;
-  }
+  public abstract isAsync(): boolean;
 
-  public assumeInfinite(value: boolean) {
+  public assumeInfinite(value: boolean = true) {
     this._isAssumedToBeInfinite = value;
     return this;
   }
@@ -38,12 +34,12 @@ export default abstract class WrappedIteratorBase<T, TReturn, TNext> {
     return typeof this.iterator()[key] === "function";
   }
 
-  protected push(...args: T[]) {
+  push(...args: T[]) {
     this._stack.push(...args);
     return this;
   }
 
-  protected pop() {
+  pop() {
     const result = this._stack.length < 1 ? { done: true } : { value: this._stack.pop() };
     return result as IteratorResult<T, TReturn>;
   }

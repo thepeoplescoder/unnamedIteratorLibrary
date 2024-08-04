@@ -10,22 +10,14 @@ export type AsyncArrayFilterCallback<InType>       = ArrayCallbackType<InType, P
 
 type ReduceCallback<T, U> = (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U;
 
-type SimplePromisifyReturnTypeTransform<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
+export type ReduceSignature1<T>    = (callbackfn: ReduceCallback<T, T>) => T;
+export type ReduceSignature2<T, U> = (callbackfn: ReduceCallback<T, U>, initialValue?: U) => U;
 
-export type ReduceSignature1<T>        = (callbackfn: ReduceCallback<T, T>) => T;
-export type ReduceSignature2<T, U = T> = (callbackfn: ReduceCallback<T, U>, initialValue: U) => U;
+export type AsyncReduceCallback<T, U> = (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => Promise<U>;
 
-export type AsyncReduceCallback1<T> = SimplePromisifyReturnTypeTransform<ReduceCallback1<T>>;
-export type AsyncReduceCallback2<T, U> = SimplePromisifyReturnTypeTransform<ReduceCallback2<T, U>>;
-
-export type AsyncReduceSignature1<T>    = (callbackfn: AsyncReduceCallback1<T>) => Promise<ReturnType<ReduceSignature1<T>>>;
-export type AsyncReduceSignature2<T>    = (callbackfn: AsyncReduceCallback1<T>) => Promise<ReturnType<ReduceSignature2<T>>>;
-export type AsyncReduceSignature3<T, U> = (callbackfn: AsyncReduceCallback2<T, U>, initialValue: U) => Promise<ReturnType<ReduceSignature3<T, U>>>;
-
+export type AsyncReduceSignature1<T>    = (callbackfn: AsyncReduceCallback<T, T>) => Promise<ReturnType<ReduceSignature1<T>>>;
+export type AsyncReduceSignature2<T, U> = (callbackfn: AsyncReduceCallback<T, U>, initialValue?: U) => Promise<ReturnType<ReduceSignature2<T, U>>>;
 
 // type ReduceParameters1<T> = Parameters<ReduceSignature1<T>>;
 // type ReduceParameters2<T> = Parameters<ReduceSignature2<T>>;
 // type ReduceParameters3<T, U> = Parameters<ReduceSignature3<T, U>>;
-
-export type SyncReduceParameters<T, U> = Parameters<ReduceSignature1<T>> | Parameters<ReduceSignature2<T>> | Parameters<ReduceSignature3<T, U>>;
-export type SyncReduceReturn<T, U> = ReturnType<ReduceSignature1<T>> | ReturnType<ReduceSignature2<T>> | ReturnType<ReduceSignature3<T, U>>;

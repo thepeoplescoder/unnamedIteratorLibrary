@@ -29,6 +29,10 @@ export default class WrappedAsyncIterator<T, TReturn = any, TNext = undefined>
     return this;
   }
 
+  isAsync() {
+    return true;
+  }
+
   push(...args: T[]) {
     return super.push(...args) as typeof this;
   }

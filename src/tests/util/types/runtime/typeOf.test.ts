@@ -2,95 +2,76 @@ import typeOf from "@~main/util/types/runtime/typeOf";
 
 import { describe, it, expect } from "vitest";
 
+type ReturnTypeOfTypeOf =
+| "Undefined"
+| "Null"
+| "Boolean"
+| "Number"
+| "BigInt"
+| "String"
+| "Function"
+| "GeneratorFunction"
+| "Generator"
+| "AsyncFunction"
+| "AsyncGeneratorFunction"
+| "AsyncGenerator"
+| "Object"
+| "Array"
+| "Symbol"
+| "Promise";
+
 type TestType = {
   value: any,
-  expected: any,
-  onOrFor: "on" | "for",
-  desc: string,
-};
+  expected: ReturnTypeOfTypeOf
+} & ({
+  on: string;
+} | {
+  for: string;
+});
 
 const tests: TestType[] = [
-  {value: undefined, expected: "Undefined", onOrFor: "on", desc: "undefined"},
-  {value: null,      expected: "Null",      onOrFor: "on", desc: "null"},
+  {value: undefined,                 expected: "Undefined",              on:  "undefined"},
+  {value: null,                      expected: "Null",                   on:  "null"},
+  {value: true,                      expected: "Boolean",                on:  "true"},
+  {value: false,                     expected: "Boolean",                on:  "false"},
+  {value: Symbol.iterator,           expected: "Symbol",                 for: "symbols"},
+  {value: NaN,                       expected: "Number",                 for: "NaN"},
+  {value: Infinity,                  expected: "Number",                 for: "Infinity"},
+  {value: 1,                         expected: "Number",                 for: "numbers"},
+  {value: 1n,                        expected: "BigInt",                 for: "big integers"},
+  {value: "a string",                expected: "String",                 for: "strings"},
+  {value: function () {},            expected: "Function",               for: "functions"},
+  {value: () => undefined,           expected: "Function",               for: "arrow functions"},
+  {value: class X {},                expected: "Function",               for: "classes"},
+  {value: function *() {},           expected: "GeneratorFunction",      for: "generator functions"},
+  {value: (function *() {})(),       expected: "Generator",              for: "generators"},
+  {value: async function () {},      expected: "AsyncFunction",          for: "async functions"},
+  {value: async () => undefined,     expected: "AsyncFunction",          for: "async arrow functions"},
+  {value: async function *() {},     expected: "AsyncGeneratorFunction", for: "async generator functions"},
+  {value: (async function *() {})(), expected: "AsyncGenerator",         for: "async generators"},
+  {value: (async function () {})(),  expected: "Promise",                for: "promises"},
+  {value: [],                        expected: "Array",                  for: "arrays"},
+  {value: {},                        expected: "Object",                 for: "objects"},
+  {value: new (class {})(),          expected: "Object",                 for: "objects created with class constructors"},
+  {
+    value: new (function SomeConstructorFunction() {} as any)(),
+    expected: "Object", for: "objects created with constructor functions"
+  },
 ];
 
-describe(typeOf.name, () => {
-  tests.forEach(test => it(`should return "${test.expected} ${test.onOrFor} ${test.desc}`, () => {
-    expect(typeOf(test.value)).toEqual(test.expected);
-  }));
-  /*
-  it("should return \"Undefined\" on undefined", () => {
-    expect(typeOf(undefined)).toBe("Undefined");
-  });
-  it("should return \"Null\" on null", () => {
-    expect(typeOf(null)).toBe("Null");
-  });
-  it("should return \"Boolean\" for true and false", () => {
-    const result = [true, false].map(typeOf);
-    expect(result).toEqual(["Boolean", "Boolean"]);
-  });
-  it("should return \"Number\" for NaN", () => {
-    expect(typeOf(NaN)).toBe("Number");
-  });
-  it("should return \"Number\" for Infinity", () => {
-    expect(typeOf(Infinity)).toBe("Number");
-  });
-  it("should return \"Number\" for numbers", () => {
-    expect(typeOf(1)).toBe("Number");
-  });
-  it("should return \"BigInt\" for big integers", () => {
-    expect(typeOf(1n)).toBe("BigInt");
-  });
-  it("should return \"String\" on strings", () => {
-    expect(typeOf("this is a string")).toBe("String");
-  });
-  it("should return \"Function\" on functions", () => {
-    function func() { };
-    expect(typeOf(func)).toBe("Function");
-  });
-  it("should return \"Function\" on arrow functions", () => {
-    const func = () => undefined;
-    expect(typeOf(func)).toBe("Function");
-  });
-  it("should return \"Function\" on ES6 classes", () => {
-    class TestClass { };
-    expect(typeOf(TestClass)).toBe("Function");
-  });
-  it("should return \"GeneratorFunction\" for generator functions", () => {
-    function* generatorFunction() { };
-    expect(typeOf(generatorFunction)).toBe("GeneratorFunction");
-  });
-  it("should return \"Generator\" for generators", () => {
-    function* generatorFunction() { };
-    expect(typeOf(generatorFunction())).toBe("Generator");
-  });
-  it("should return \"AsyncFunction\" for async functions", async () => {
-    async function func() { };
-    expect(typeOf(func)).toBe("AsyncFunction");
-  });
-  it("should return \"AsyncFunction\" for async arrow functions", async () => {
-    const func = async () => { };
-    expect(typeOf(func)).toBe("AsyncFunction");
-  });
-  it("should return \"AsyncGeneratorFunction\" for async generator functions", async () => {
-    async function* generatorFunction() { };
-    expect(typeOf(generatorFunction)).toBe("AsyncGeneratorFunction");
-  });
-  it("should return \"AsyncGenerator\" for async generators", async () => {
-    async function* generatorFunction() { };
-    expect(typeOf(generatorFunction())).toBe("AsyncGenerator");
-  });
-  it("should return \"Object\" for objects created with constructors", () => {
-    function SomeConstructorFunction() { };
-    expect(typeOf(new SomeConstructorFunction())).toBe("Object");
-  });
-  it("should return \"Symbol\" for symbols", () => {
-    expect(typeOf(Symbol.iterator)).toBe("Symbol");
-  });
-  it("should return \"Promise\" for promises", async () => {
-    async function func() { return 1; };
-    const promise = func();
-    expect(typeOf(promise)).toBe("Promise");
-  });
-  */
-});
+describe(typeOf.name, () =>
+  tests.forEach(test => it(...shouldBehaveAsDescribedAboveFor(test)))
+);
+
+function shouldBehaveAsDescribedAboveFor(test: TestType) {
+  const result = typeOf(test.value);
+
+  const onOrForThing = "for" in test
+    ? `for ${test.for}`
+    : `on ${test.on}`;
+
+  const description = `should return "${test.expected}" ${onOrForThing}`;
+  const callback    = () => expect(result).toEqual(test.expected);
+
+  return [description, callback] as [typeof description, typeof callback];
+}

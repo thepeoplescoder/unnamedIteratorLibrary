@@ -1,43 +1,44 @@
 import iteratorForEachAsync from "@~main/iterators/operations/async/iteratorForEachAsync";
 
 import { describe, expect, it } from "vitest";
-import TestObjects from "@~test/lib/TestObjects";
+import TestObjects from "@~lib/test/TestObjects";
 
 import typeOf from "@~types/runtime/typeOf";
-import { asAsyncIterator } from "@~util/convert/toAsyncIterator";
+import { asAsyncIterator } from "@~main/util/convert/asAsyncIterator";
 
-describe(iteratorForEachAsync.name, async () => {
+describe(iteratorForEachAsync.name, () => {
   it("should be an async function", () => {
-    expect(iteratorForEachAsync).toSatisfy(x => typeOf(x) === "AsyncFunction");
+    const result = typeOf(iteratorForEachAsync) === "AsyncFunction";
+    expect(result).toBe(true);
   });
   it("should behave the same way as forEach for arrays", async () => {
     const [accumulateSync,  getSumSync]  = createAccumulator();
     const [accumulateAsync, getSumAsync] = createAsyncAccumulatorBasedOn(createAccumulator());
 
     const testArray = TestObjects.newArray();
-    testArray.forEach(accumulateSync);
-
     const asyncIterator = asAsyncIterator(testArray[Symbol.iterator]());
+
+    testArray.forEach(accumulateSync);
     await iteratorForEachAsync(asyncIterator, accumulateAsync);
 
-    expect(getSumSync()).toEqual(getSumAsync());
+    const expected = getSumSync();
+    const result = getSumAsync();
+
+    expect(result).toEqual(expected);
 
     return;
 
-    function createAsyncAccumulatorBasedOn(
-      accumulator: ReturnType<typeof createAccumulator>
-    ): [(x: number) => Promise<void>, () => number]
-    {
+    function createAsyncAccumulatorBasedOn(accumulator: ReturnType<typeof createAccumulator>) {
       const [accumulateSync, getSum] = accumulator;
-      const accumulate = async (x) => accumulateSync(x);
-      return [accumulate, getSum];
+      const accumulate = async (x: number) => accumulateSync(x);
+      return [accumulate, getSum] as [typeof accumulate, typeof getSum];
     }
 
-    function createAccumulator(): [(x: number) => void, () => number] {
+    function createAccumulator() {
       let sum = 0;
-      const accumulate = x => sum += x;
+      const accumulate = (x: number) => sum += x;
       const getSum = () => sum;
-      return [accumulate, getSum];
+      return [accumulate, getSum] as [typeof accumulate, typeof getSum];
     }
   });
 });

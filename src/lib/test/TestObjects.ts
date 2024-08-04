@@ -1,17 +1,17 @@
 import { assert } from "vitest";
-import { asAsyncIterator } from "@~util/convert/toAsyncIterator";
+import { asAsyncIterator } from "@~main/util/convert/asAsyncIterator";
 
 function createSimpleCallback() {
-  let text = "";
+  let strings: string[] = [];
+  return [append, getText] as [typeof append, typeof getText];
+
   function append(v: any) {
-    text += String(v);
+    strings.push(String(v));  // we don't want to hold a reference to the original object, to be garbage-collection friendly
   }
   function getText() {
-    return text;
+    return strings.join('');
   }
-  return [append, getText] as [typeof append, typeof getText];
 }
-
 
 function newAsyncIterator() {
   return asAsyncIterator(newIterator());
@@ -28,14 +28,16 @@ function newIterator() {
 }
 
 function newIterable() {
+  const array = newArray();
   return {
-    [Symbol.iterator]: () => newArray()[Symbol.iterator]()
+    [Symbol.iterator]: () => array[Symbol.iterator]()
   };
 }
 
 function newArray() {
   const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   assert(array.length >= 5);
+  assert(array.every(x => typeof x === "number"));
   return array;
 }
 

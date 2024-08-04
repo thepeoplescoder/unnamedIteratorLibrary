@@ -1,5 +1,4 @@
 import { callIteratorMethod } from "@~util/callIteratorMethod";
-import { isAsyncGeneratorOrAsyncIterator } from "@~types/runtime/checks";
 
 export type AsyncIterators<T, TReturn, TNext> = AsyncIterator<T, TReturn, TNext> | AsyncIterator<Awaited<T>, TReturn, TNext>;
 export type AsyncGenerators<T, TReturn, TNext> = AsyncGenerator<T, TReturn, TNext> | AsyncGenerator<Awaited<T>, TReturn, TNext>
@@ -39,11 +38,11 @@ export function asAsyncIterator<T, TReturn = any, TNext = undefined>(
   return new AsAsyncIterator<T, TReturn, TNext>(...args).asAwaited();
 }
 
-export function toAsyncIterator<T, TReturn = any, TNext = undefined>(
-  x: Iterator<T, TReturn, TNext> | AsyncIterator<Awaited<T>, TReturn, TNext> | AsyncGenerator<Awaited<T>, TReturn, TNext>
-): AsyncIterator<Awaited<T>, TReturn, TNext>
-{
-  return isAsyncGeneratorOrAsyncIterator(x)
-    ? x as AsyncIterator<Awaited<T>, TReturn, TNext>
-    : asAsyncIterator(x as Iterator<T, TReturn, TNext>);
-}
+// export function toAsyncIterator<T, TReturn = any, TNext = undefined>(
+//   x: Iterator<T, TReturn, TNext> | AsyncIterator<Awaited<T>, TReturn, TNext> | AsyncGenerator<Awaited<T>, TReturn, TNext>
+// ): AsyncIterator<Awaited<T>, TReturn, TNext>
+// {
+//   return isAsyncGeneratorOrAsyncIterator(x)
+//     ? x as AsyncIterator<Awaited<T>, TReturn, TNext>
+//     : asAsyncIterator(x as Iterator<T, TReturn, TNext>);
+// }

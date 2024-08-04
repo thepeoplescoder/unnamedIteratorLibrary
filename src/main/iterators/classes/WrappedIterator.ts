@@ -7,7 +7,7 @@ import iteratorReduce, { IteratorReduceCallback } from "@~iterators/operations/s
 import iteratorChain from "@~iterators/operations/sync/iteratorChain";
 
 import { callIteratorMethod } from "@~util/callIteratorMethod";
-import { asAsyncIterator } from "@~util/convert/toAsyncIterator";
+import { asAsyncIterator } from "@~main/util/convert/asAsyncIterator";
 import { toIterator, IteratorOrGenerator } from "@~util/convert/toIterator";
 
 import { ThisArg } from "@~types/static/ThisArg";
@@ -21,6 +21,10 @@ export default class WrappedIterator<T, TReturn = any, TNext = undefined>
 {
   constructor(x: Iterable<T> | IteratorOrGenerator<T, TReturn, TNext>) {
     super(toIterator(x));
+  }
+
+  isAsync() {
+    return false;
   }
 
   assumeInfinite(value: boolean = true) {
