@@ -1,6 +1,6 @@
 import { throw_ } from "@thepeoplescoder/throw_";
 
-export default async function iteratorReduceAsync<OutType, T, TReturn = any, TNext = undefined>(
+export default async function iteratorReduceAsync<OutType, T = OutType, TReturn = any, TNext = undefined>(
   theIterator: AsyncIterator<T, TReturn, TNext>,
   callback: IteratorReduceAsyncCallback<OutType, T, TReturn, TNext>,
   ...initialValue: [] | [OutType]

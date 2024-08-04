@@ -3,10 +3,12 @@ import { asyncArrayForEach } from "@~arrays/operations/asyncArrayForEach";
 import { asyncArrayMap } from "@~arrays/operations/asyncArrayMap";
 import { asyncArrayReduce } from "@~arrays/operations/asyncArrayReduce";
 import { ReduceSignature1, ReduceSignature2 } from "../types";
+import { TailOf } from "@~main/util/types/static/tupleTypes";
 
 export default class WrappedArray<T> {
   private _array: Array<T>;
-  async() {
+
+  async(this: WrappedArray<T>) {
     return Object.freeze({
       forEach: this.asyncForEach.bind(this),
       map:     this.asyncMap.bind(this),
